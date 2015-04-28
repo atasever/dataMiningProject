@@ -18,7 +18,9 @@ beta.write("@RELATION beta\n\n@ATTRIBUTE TID numeric\n@ATTRIBUTE aminoAcidSequen
 loop = open('loop.arff', 'w')
 loop.write("@RELATION loop\n\n@ATTRIBUTE TID numeric\n@ATTRIBUTE aminoAcidSequence string\n\n@DATA\n")
 
-TID = 0
+loopTID = 0
+betaTID = 0
+helixTID = 0
 
 for line in oku:
     islem = satir % 3
@@ -29,18 +31,20 @@ for line in oku:
         groups = [''.join(value) for key, value in itertools.groupby(secondary)]
         start = 0
         for index in range(len(groups)):
-            TID = TID + 1
             segment = groups[index]
             end = start + len(segment)
             aminoSegment = protein[start:end]
             start = start + len(segment)
             print segment + "-" + aminoSegment
             if segment[0]=='H' :
-                helix.write(str(TID) + ',' + aminoSegment + '\n')
+                helixTID = helixTID + 1
+                helix.write(str(helixTID) + ',' + aminoSegment + '\n')
             elif segment[0]=='E' :
-                beta.write(str(TID) + ',' + aminoSegment + '\n')
+                betaTID = betaTID + 1
+                beta.write(str(betaTID) + ',' + aminoSegment + '\n')
             elif segment[0]=='L' :
-                loop.write(str(TID) + ',' + aminoSegment + '\n')
+                loopTID = loopTID + 1
+                loop.write(str(loopTID) + ',' + aminoSegment + '\n')
             else :
                 print "hatali ikincil yapi!!"
                 quit()
