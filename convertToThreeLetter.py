@@ -1,7 +1,7 @@
 __author__ = 'M. Umut ATASEVER'
 
 satir = 0
-dictionary = {'G':'H', 'I':'H', 'B':'E',  'S':'L', 'T':'L', 'C':'L', ' ':'L'}
+dictionary = {'G':'H', 'I':'H', 'B':'E', 'S':'L', 'T':'L', 'C':'L', ' ':'L'}
 
 def replace_all(text, dic):
     for i, j in dic.iteritems():
