@@ -8,13 +8,9 @@ def split_len(seq, length):
     return [seq[i:i+length] for i in range(0, len(seq), length)]
 
 counter = 0
-aaGlobalDict = []
+aaGlobalDict = {}
 
 dataFile = open('data/converted.fasta', 'r+')
-
-helix = open('data/helix.txt', 'w')
-beta = open('data/beta.txt', 'w')
-loop = open('data/loop.txt', 'w')
 
 for line in dataFile:
     lineType = counter % 3
@@ -29,43 +25,29 @@ for line in dataFile:
             end = start + len(segment)
             aminoSegment = protein[start:end]
             start = start + len(segment)
-            #print segment + "-" + aminoSegment
-            if segment[0]=='H' :
-                helix.write( aminoSegment + '\n' )
-            elif segment[0]=='E' :
-                beta.write( aminoSegment + '\n' )
-            elif segment[0]=='L' :
-                loop.write( aminoSegment + '\n' )
-            else :
-                print "unexpected secondary structure : " + segment[0]
-                quit()
-            segmentCounter = Counter(aminoSegment)
-            aaDict = dict(segmentCounter)
-            for aa,count in aaDict.iteritems():
-                item = aa + str(count).zfill(2)
-                if item not in aaGlobalDict:
-                    aaGlobalDict.append(item)
+            aaSet = list(set(aminoSegment))
+            aaGlobalDict = set(list(aaGlobalDict) + list(aaSet))
 
     counter += 1
 
+
 aaGlobalDict = sorted(aaGlobalDict)
 
-print "Repeated structures dictionary : "
-print aaGlobalDict
 
 structureDict = {}
 for x in aaGlobalDict:
     structureDict[x] = '?'
 
-helix.close()
-beta.close()
-loop.close()
+print "Repeated structures dictionary : "
+print structureDict
+
+
 helix = open('data/helix.txt', 'r+')
 beta = open('data/beta.txt', 'r+')
 loop = open('data/loop.txt', 'r+')
-helixArff = open('data/helix.arff', 'w')
-betaArff = open('data/beta.arff', 'w')
-loopArff = open('data/loop.arff', 'w')
+helixArff = open('data/helix_small.arff', 'w')
+betaArff = open('data/beta_small.arff', 'w')
+loopArff = open('data/loop_small.arff', 'w')
 
 helixArff.write("@RELATION helix\n\n")
 betaArff.write("@RELATION beta\n\n")
@@ -90,11 +72,9 @@ TID=1
 for line in helix:
     lineDict = structureDict.copy()
     line = line.rstrip()
-    segmentCounter = Counter(line)
-    aaDict = dict(segmentCounter)
-    for aa,count in aaDict.iteritems():
-        item = aa + str(count).zfill(2)
-        lineDict[item] = 'yes'
+    aaSet = (set(line))
+    for aa in aaSet:
+        lineDict[aa] = 'yes'
     lineDict = str(collections.OrderedDict(sorted(lineDict.items())).values())
     lineDict = lineDict[1:-1].replace("'","")
     helixArff.write( lineDict + '\n')
@@ -104,11 +84,9 @@ TID=1
 for line in beta:
     lineDict = structureDict.copy()
     line = line.rstrip()
-    segmentCounter = Counter(line)
-    aaDict = dict(segmentCounter)
-    for aa,count in aaDict.iteritems():
-        item = aa + str(count).zfill(2)
-        lineDict[item] = 'yes'
+    aaSet = (set(line))
+    for aa in aaSet:
+        lineDict[aa] = 'yes'
     lineDict = str(collections.OrderedDict(sorted(lineDict.items())).values())
     lineDict = lineDict[1:-1].replace("'","")
     betaArff.write( lineDict + '\n')
@@ -118,11 +96,9 @@ TID=1
 for line in loop:
     lineDict = structureDict.copy()
     line = line.rstrip()
-    segmentCounter = Counter(line)
-    aaDict = dict(segmentCounter)
-    for aa,count in aaDict.iteritems():
-        item = aa + str(count).zfill(2)
-        lineDict[item] = 'yes'
+    aaSet = (set(line))
+    for aa in aaSet:
+        lineDict[aa] = 'yes'
     lineDict = str(collections.OrderedDict(sorted(lineDict.items())).values())
     lineDict = lineDict[1:-1].replace("'","")
     loopArff.write( lineDict + '\n')
