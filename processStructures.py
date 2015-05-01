@@ -55,7 +55,7 @@ print aaGlobalDict
 
 structureDict = {}
 for x in aaGlobalDict:
-    structureDict[x] = 'no'
+    structureDict[x] = '?'
 
 helix.close()
 beta.close()
@@ -71,14 +71,15 @@ helixArff.write("@RELATION helix\n\n")
 betaArff.write("@RELATION beta\n\n")
 loopArff.write("@RELATION loop\n\n")
 
-helixArff.write("@ATTRIBUTE TID numeric\n")
-betaArff.write("@ATTRIBUTE TID numeric\n")
-loopArff.write("@ATTRIBUTE TID numeric\n")
+
+#helixArff.write("@ATTRIBUTE TID numeric\n")
+#betaArff.write("@ATTRIBUTE TID numeric\n")
+#loopArff.write("@ATTRIBUTE TID numeric\n")
 
 for x in aaGlobalDict:
-    helixArff.write("@ATTRIBUTE "+ x +" {no,yes}\n")
-    betaArff.write("@ATTRIBUTE "+ x +" {no,yes}\n")
-    loopArff.write("@ATTRIBUTE "+ x +" {no,yes}\n")
+    helixArff.write("@ATTRIBUTE "+ x +" {yes}\n")
+    betaArff.write("@ATTRIBUTE "+ x +" {yes}\n")
+    loopArff.write("@ATTRIBUTE "+ x +" {yes}\n")
 
 helixArff.write("\n@Data\n")
 betaArff.write("\n@Data\n")
@@ -96,7 +97,7 @@ for line in helix:
         lineDict[item] = 'yes'
     lineDict = str(collections.OrderedDict(sorted(lineDict.items())).values())
     lineDict = lineDict[1:-1].replace("'","")
-    helixArff.write(str(TID) + ", " + lineDict + '\n')
+    helixArff.write( lineDict + '\n')
     TID += 1
 
 TID=1
@@ -110,7 +111,7 @@ for line in beta:
         lineDict[item] = 'yes'
     lineDict = str(collections.OrderedDict(sorted(lineDict.items())).values())
     lineDict = lineDict[1:-1].replace("'","")
-    betaArff.write(str(TID) + ", " + lineDict + '\n')
+    betaArff.write( lineDict + '\n')
     TID += 1
 
 TID=1
@@ -124,7 +125,7 @@ for line in loop:
         lineDict[item] = 'yes'
     lineDict = str(collections.OrderedDict(sorted(lineDict.items())).values())
     lineDict = lineDict[1:-1].replace("'","")
-    loopArff.write(str(TID) + ", " + lineDict + '\n')
+    loopArff.write( lineDict + '\n')
     TID += 1
 
 
